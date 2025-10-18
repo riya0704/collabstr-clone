@@ -1,0 +1,20 @@
+{
+  "name": "collabstr-clone",
+  "version": "1.0.0",
+  "description": "Full-stack clone of Collabstr - Creator and Brand collaboration platform",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "install-deps": "npm install && cd server && npm install && cd ../client && npm install",
+    "vercel-build": "cd client && npm install && npm run build"
+  },
+  "keywords": ["collabstr", "creator", "brand", "collaboration"],
+  "author": "Developer",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

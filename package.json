@@ -7,9 +7,11 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
-    "build": "cd client && npm run build && cd ../server && npm run build",
+    "build": "npm run install-client && npm run build-client",
+    "install-client": "cd client && npm install",
+    "build-client": "cd client && npm run build",
     "install-deps": "npm install && cd server && npm install && cd ../client && npm install",
-    "vercel-build": "cd client && npm install && npm run build"
+    "vercel-build": "npm run install-client && npm run build-client"
   },
   "keywords": ["collabstr", "creator", "brand", "collaboration"],
   "author": "Developer",

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { 
@@ -163,11 +164,14 @@ const Dashboard: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               Welcome back, {user?.profile.name || 'User'}!
+              {user?.isAdmin && <span className="ml-2 text-purple-600">🛡️</span>}
             </h1>
             <p className="text-gray-600 mt-1">
-              {user?.userType === 'creator' 
-                ? 'Track your collaborations and earnings' 
-                : 'Manage your campaigns and find creators'
+              {user?.isAdmin 
+                ? 'Platform administrator - manage users and collaborations'
+                : user?.userType === 'creator' 
+                  ? 'Track your collaborations and earnings' 
+                  : 'Manage your campaigns and find creators'
               }
             </p>
           </div>
@@ -336,28 +340,38 @@ const Dashboard: React.FC = () => {
               <div className="space-y-3">
                 {user?.userType === 'creator' ? (
                   <>
-                    <button className="w-full btn-primary text-sm py-3">
+                    <Link to="/collaborations" className="w-full btn-primary text-sm py-3 block text-center">
                       Browse New Opportunities
-                    </button>
-                    <button className="w-full btn-secondary text-sm py-3">
+                    </Link>
+                    <Link to="/settings" className="w-full btn-secondary text-sm py-3 block text-center">
                       Update Portfolio
-                    </button>
+                    </Link>
                     <button className="w-full btn-secondary text-sm py-3">
                       View Analytics
                     </button>
                   </>
                 ) : (
                   <>
-                    <button className="w-full btn-primary text-sm py-3">
+                    <Link to="/create-campaign" className="w-full btn-primary text-sm py-3 block text-center">
                       Create New Campaign
-                    </button>
-                    <button className="w-full btn-secondary text-sm py-3">
+                    </Link>
+                    <Link to="/creators" className="w-full btn-secondary text-sm py-3 block text-center">
                       Find Creators
-                    </button>
+                    </Link>
                     <button className="w-full btn-secondary text-sm py-3">
                       View Applications
                     </button>
                   </>
+                )}
+                
+                {/* Admin Panel Access */}
+                {user?.isAdmin && (
+                  <Link 
+                    to="/admin" 
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white text-sm py-3 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 block text-center font-semibold"
+                  >
+                    🛡️ Admin Panel
+                  </Link>
                 )}
               </div>
             </div>

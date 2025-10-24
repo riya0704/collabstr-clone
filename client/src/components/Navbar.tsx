@@ -40,6 +40,12 @@ const Navbar: React.FC = () => {
               Find Creators
             </Link>
             <Link 
+              to="/services" 
+              className="text-gray-600 hover:text-primary-600 font-medium transition-colors duration-200"
+            >
+              Services
+            </Link>
+            <Link 
               to="/collaborations" 
               className="text-gray-600 hover:text-primary-600 font-medium transition-colors duration-200"
             >
@@ -70,6 +76,7 @@ const Navbar: React.FC = () => {
             {user ? (
               <div className="relative">
                 <button
+                  type="button"
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-3 p-2 rounded-full hover:bg-gray-50 transition-colors duration-200"
                 >
@@ -110,8 +117,22 @@ const Navbar: React.FC = () => {
                     >
                       Settings
                     </Link>
+                    {user?.isAdmin && (
+                      <>
+                        <hr className="my-2 border-gray-100" />
+                        <Link
+                          to="/admin"
+                          className="flex items-center px-4 py-2 text-purple-600 hover:bg-purple-50 transition-colors duration-200"
+                          onClick={() => setIsProfileOpen(false)}
+                        >
+                          <User className="w-4 h-4 mr-3" />
+                          Admin Panel
+                        </Link>
+                      </>
+                    )}
                     <hr className="my-2 border-gray-100" />
                     <button
+                      type="button"
                       onClick={handleLogout}
                       className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-200"
                     >
@@ -140,6 +161,7 @@ const Navbar: React.FC = () => {
 
             {/* Mobile Menu Button */}
             <button
+              type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200"
             >
@@ -162,6 +184,13 @@ const Navbar: React.FC = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Find Creators
+              </Link>
+              <Link
+                to="/services"
+                className="block px-4 py-2 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Services
               </Link>
               <Link
                 to="/collaborations"

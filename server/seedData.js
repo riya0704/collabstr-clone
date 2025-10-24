@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const Collaboration = require('./models/Collaboration');
+const Service = require('./models/Service');
 require('dotenv').config();
 
 const sampleCreators = [
@@ -143,6 +144,25 @@ const sampleBrands = [
   }
 ];
 
+// Admin user
+const adminUser = {
+  email: 'admin@collabstr.com',
+  password: 'admin123',
+  userType: 'brand',
+  profile: {
+    name: 'Admin User',
+    bio: 'Platform administrator with full access to manage users and collaborations.',
+    location: 'San Francisco, CA'
+  },
+  brandProfile: {
+    companyName: 'Collabstr Admin',
+    industry: 'Technology',
+    targetAudience: 'Platform management'
+  },
+  isVerified: true,
+  isAdmin: true
+};
+
 const seedDatabase = async () => {
   try {
     // Connect to MongoDB
@@ -152,16 +172,17 @@ const seedDatabase = async () => {
     // Clear existing data
     await User.deleteMany({});
     await Collaboration.deleteMany({});
+    await Service.deleteMany({});
     console.log('Cleared existing data');
 
     // Create users
     const createdUsers = [];
     
-    for (const userData of [...sampleCreators, ...sampleBrands]) {
+    for (const userData of [...sampleCreators, ...sampleBrands, adminUser]) {
       const user = new User(userData);
       await user.save();
       createdUsers.push(user);
-      console.log(`Created user: ${user.profile.name}`);
+      console.log(`Created user: ${user.profile.name}${user.isAdmin ? ' (ADMIN)' : ''}`);
     }
 
     // Create sample collaborations
@@ -214,6 +235,156 @@ const seedDatabase = async () => {
       const collaboration = new Collaboration(collabData);
       await collaboration.save();
       console.log(`Created collaboration: ${collaboration.title}`);
+    }
+
+    // Create sample services
+    const creatorUsers = createdUsers.filter(user => user.userType === 'creator');
+    
+    const sampleServices = [
+      {
+        creator: creatorUsers[0]._id, // Sarah Johnson
+        title: 'Professional Instagram Content Creation',
+        description: 'I will create high-quality Instagram posts and stories for your fashion or lifestyle brand. With over 125k engaged followers, I specialize in creating authentic content that drives engagement and sales.',
+        category: 'Social Media Marketing',
+        pricing: {
+          basic: {
+            price: 300,
+            description: '1 Instagram post with professional photography',
+            deliveryTime: 3,
+            revisions: 2,
+            features: ['High-quality photo', 'Engaging caption', 'Hashtag research', '24-hour story highlight']
+          },
+          standard: {
+            price: 600,
+            description: '1 Instagram post + 3 stories + 1 reel',
+            deliveryTime: 5,
+            revisions: 3,
+            features: ['Everything in Basic', '3 Instagram stories', '1 Instagram Reel', 'Usage rights for 6 months']
+          },
+          premium: {
+            price: 1200,
+            description: 'Complete content package with multiple posts',
+            deliveryTime: 7,
+            revisions: 5,
+            features: ['Everything in Standard', '2 additional posts', 'Story highlights', 'Usage rights for 1 year', 'Performance analytics']
+          }
+        },
+        gallery: [
+          'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800',
+          'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800'
+        ],
+        tags: ['instagram', 'fashion', 'lifestyle', 'content creation'],
+        requirements: 'Please provide brand guidelines, product information, and any specific requirements for the content.',
+        stats: {
+          views: 1250,
+          orders: 45,
+          rating: 4.9,
+          reviews: 38
+        },
+        seo: {
+          slug: 'professional-instagram-content-creation',
+          metaTitle: 'Professional Instagram Content Creation - Fashion & Lifestyle',
+          metaDescription: 'Get high-quality Instagram content from verified fashion influencer with 125k followers'
+        }
+      },
+      {
+        creator: creatorUsers[1]._id, // Mike Rodriguez
+        title: 'Fitness YouTube Video Production',
+        description: 'I will create engaging fitness content for your YouTube channel or brand. As a certified trainer with 156k YouTube subscribers, I deliver professional workout videos and fitness advice.',
+        category: 'Video Production',
+        pricing: {
+          basic: {
+            price: 500,
+            description: '5-minute workout video with basic editing',
+            deliveryTime: 7,
+            revisions: 2,
+            features: ['Professional filming', 'Basic editing', 'Custom thumbnail', 'Video description']
+          },
+          standard: {
+            price: 1000,
+            description: '10-minute comprehensive workout video',
+            deliveryTime: 10,
+            revisions: 3,
+            features: ['Everything in Basic', 'Advanced editing', 'Multiple camera angles', 'Branded intro/outro', 'Social media clips']
+          },
+          premium: {
+            price: 2000,
+            description: 'Complete fitness series with multiple videos',
+            deliveryTime: 14,
+            revisions: 5,
+            features: ['Everything in Standard', '3 workout videos', 'Nutrition guide', 'Custom graphics', 'Full commercial rights']
+          }
+        },
+        gallery: [
+          'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800',
+          'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800'
+        ],
+        tags: ['youtube', 'fitness', 'workout', 'video production'],
+        requirements: 'Please specify workout type, target audience, and any equipment preferences.',
+        stats: {
+          views: 890,
+          orders: 23,
+          rating: 4.8,
+          reviews: 19
+        },
+        seo: {
+          slug: 'fitness-youtube-video-production',
+          metaTitle: 'Professional Fitness YouTube Video Production',
+          metaDescription: 'Get professional fitness videos from certified trainer with 156k YouTube subscribers'
+        }
+      },
+      {
+        creator: creatorUsers[2]._id, // Emma Chen
+        title: 'Tech Product Review & Unboxing',
+        description: 'I will create detailed tech product reviews and unboxing videos for your brand. With expertise in consumer electronics and 95k engaged followers, I provide honest, informative content.',
+        category: 'Content Creation',
+        pricing: {
+          basic: {
+            price: 400,
+            description: 'Unboxing video with first impressions',
+            deliveryTime: 5,
+            revisions: 2,
+            features: ['Professional unboxing', 'First impressions', 'Key features highlight', 'Social media post']
+          },
+          standard: {
+            price: 800,
+            description: 'Complete product review with testing',
+            deliveryTime: 10,
+            revisions: 3,
+            features: ['Everything in Basic', 'In-depth testing', 'Pros and cons analysis', 'Comparison with competitors', 'Written review']
+          },
+          premium: {
+            price: 1500,
+            description: 'Comprehensive review series across platforms',
+            deliveryTime: 14,
+            revisions: 4,
+            features: ['Everything in Standard', 'Multi-platform content', 'Long-term usage review', 'Tutorial videos', 'Q&A session']
+          }
+        },
+        gallery: [
+          'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800',
+          'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=800'
+        ],
+        tags: ['tech', 'review', 'unboxing', 'gadgets'],
+        requirements: 'Please provide product specifications, key selling points, and target audience information.',
+        stats: {
+          views: 650,
+          orders: 18,
+          rating: 4.7,
+          reviews: 15
+        },
+        seo: {
+          slug: 'tech-product-review-unboxing',
+          metaTitle: 'Professional Tech Product Review & Unboxing Services',
+          metaDescription: 'Get honest tech reviews and unboxing videos from experienced tech content creator'
+        }
+      }
+    ];
+
+    for (const serviceData of sampleServices) {
+      const service = new Service(serviceData);
+      await service.save();
+      console.log(`Created service: ${service.title}`);
     }
 
     console.log('Database seeded successfully!');

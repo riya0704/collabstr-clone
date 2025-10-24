@@ -141,7 +141,8 @@ const CreateCampaign: React.FC = () => {
         setLoading(true);
 
         try {
-            await axios.post('/api/collaborations', formData);
+            const API_URL = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api';
+            await axios.post(`${API_URL}/collaborations`, formData);
             navigate('/dashboard');
         } catch (error: any) {
             console.error('Error creating campaign:', error);

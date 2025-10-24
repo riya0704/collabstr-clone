@@ -5,6 +5,7 @@ interface User {
   id: string;
   email: string;
   userType: 'creator' | 'brand';
+  isAdmin?: boolean;
   profile: {
     name?: string;
     bio?: string;

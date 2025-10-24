@@ -185,6 +185,17 @@ JWT_SECRET=your_secure_jwt_secret
 CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name
 ```
 
+``
+Creator Account:
+
+Email: sarah.fashion@example.com
+Password: password123
+Brand Account:
+
+Email: partnerships@fashionnova.com
+Password: password123
+
+```
 ## 📝 License
 
 MIT License - feel free to use this project for learning or commercial purposes.
